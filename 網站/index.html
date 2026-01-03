@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>台宣貝斯特教會 | 輝煌金質感版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'main-bg': '#FAF8F2',
+                        'primary': '#D97706',   /* 琥珀金 */
+                        'secondary': '#FBBF24', /* 柔和金 */
+                        'text-dark': '#292524', /* 深暖灰黑 */
+                        'text-gray': '#78716C', /* 質感暖灰 */
+                    },
+                    fontFamily: {
+                        serif: ['Noto Serif TC', 'serif'],
+                        sans: ['Noto Sans TC', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 30px rgba(0, 0, 0, 0.04)',
+                        'card-hover': '0 20px 40px rgba(217, 119, 6, 0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* ▼▼▼ 修正 1：防止手機版左右搖晃或偏左 ▼▼▼ */
+        html, body { 
+            scroll-behavior: smooth;
+            overflow-x: hidden; /* 關鍵：隱藏超出螢幕寬度的內容 */
+            width: 100%;
+        }
+        
+        body { 
+            background-color: #FAF8F2;
+            color: #292524;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+        }
+        
+        /* --- 共用區塊與標題設定 --- */
+        .custom-section {
+            padding: 60px 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* 讓所有標題區塊都置中 */
+        .section-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        /* 統一的標題樣式 */
+        .section-title {
+            font-family: "Microsoft JhengHei", "微軟正黑體", sans-serif; /* 指定字體 */
+            font-size: 2rem;
+            color: #333;
+            margin: 0 0 10px 0;
+            position: relative;
+            display: inline-block;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /* 標題下方的橘色裝飾線 */
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: #ffaa00;
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            color: #777;
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        /* --- 第一區：活動訊息 (Activity) --- */
+        .section-activity {
+            background-color: #ffffff;
+        }
+
+        .poster-scroll-wrapper {
+            position: relative;
+            margin: 0 auto; 
+            max-width: 100%;
+        }
+
+        .scroll-hint {
+            text-align: right;
+            color: #aaa;
+            font-size: 0.85rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+            padding-right: 10px;
+        }
+
+        .poster-scroll-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 25px;
+            padding: 5px 5px 30px 5px;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            
+            /* ▼▼▼ 關鍵修改：這三行讓它自動置中 ▼▼▼ */
+            margin: 0 auto;         /* 讓容器自己在畫面中置中 */
+            width: fit-content;     /* 容器寬度「剛剛好」包住海報就好，不要硬撐滿 */
+            max-width: 100%;        /* 但最大不能超過螢幕寬度 (超過就滑動) */
+            
+            /* 隱藏卷軸 */
+            scrollbar-width: none; 
+            -ms-overflow-style: none;
+        }
+        .poster-scroll-container::-webkit-scrollbar { display: none; }
+
+        .poster-card {
+            flex: 0 0 auto;
+            width: 260px;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .poster-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .poster-image-area {
+            width: 100%;
+            height: 340px;
+            background-color: #eee;
+            background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .poster-content {
+            padding: 15px;
+            text-align: center;
+            background: #fff;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .poster-content h4 {
+            margin: 0 0 5px 0;
+            color: #333;
+            font-size: 1.1rem;
+        }
+        .poster-content p {
+            margin: 0;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+
+        /* --- 第二區：幸福加油站 (Happiness) --- */
+        .section-happiness {
+            background-color: #fffaf4; /* 暖色背景 */
+        }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 0 auto; 
+        }
+
+        .article-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid #ffaa00;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .article-body {
+            padding: 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .article-tag {
+            display: inline-block;
+            background: #fff0d4;
+            color: #d48806;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .article-card h3 {
+            margin: 0 0 15px 0;
+            color: #2c3e50;
+            font-size: 1.25rem;
+            line-height: 1.4;
+            width: 100%;
+        }
+
+        .article-card p {
+            color: #666;
+            line-height: 1.8;
+            margin: 0;
+            font-size: 0.95rem;
+            text-align: justify;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-primary selection:text-white">
+
+    <nav class="md:hidden fixed top-0 w-full z-50 bg-[#FAF8F2]/95 backdrop-blur-md border-b border-amber-100 px-6 py-4 flex justify-between items-center shadow-sm">
+        
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 bg-primary text-white rounded-lg flex items-center justify-center shadow-md shrink-0">
+                <i class="fa-solid fa-church text-xs"></i>
+            </div>
+            <span class="text-lg font-serif font-bold tracking-wide text-text-dark">台宣貝斯特教會</span>
+        </div>
+        
+        <button onclick="toggleMenu()" class="text-2xl text-text-dark hover:text-primary transition focus:outline-none">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </nav>
+
+    <div id="mobile-menu-overlay" class="hidden fixed inset-0 z-[60] bg-white/98 backdrop-blur-xl flex flex-col items-center justify-center transition-all duration-300">
+        
+        <button onclick="toggleMenu()" class="absolute top-6 right-6 text-3xl text-gray-400 hover:text-rose-500 transition">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="flex flex-col gap-8 text-center text-xl font-bold text-text-dark font-serif">
+            <a href="#home" onclick="toggleMenu()" class="hover:text-primary transition">首頁</a>
+            <a href="#about" onclick="toggleMenu()" class="hover:text-primary transition">核心特色</a>
+            <a href="#schedule" onclick="toggleMenu()" class="hover:text-primary transition">聚會時間</a>
+            <a href="#activity-news" onclick="toggleMenu()" class="hover:text-primary transition">活動訊息</a>
+            <a href="#happiness-station" onclick="toggleMenu()" class="hover:text-primary transition">幸福加油站</a>
+            <a href="#faq" onclick="toggleMenu()" class="hover:text-primary transition">新朋友常見問答</a>
+            <a href="#location" onclick="toggleMenu()" class="hover:text-primary transition">交通資訊</a>
+        </div>
+    </div>
+    <nav class="hidden md:flex fixed top-0 w-full z-50 px-8 py-5 transition-all duration-300 bg-[#FAF8F2]/90 backdrop-blur-md border-b border-white/50">
+        <div class="max-w-6xl mx-auto w-full flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-primary text-white rounded-lg flex items-center justify-center shadow-md">
+                    <i class="fa-solid fa-church text-xs"></i>
+                </div>
+                <span class="text-lg font-serif font-bold tracking-wide text-text-dark">台宣貝斯特教會</span>
+            </div>
+            <div class="flex gap-10 text-sm font-medium text-text-gray">
+                <a href="#home" class="hover:text-primary transition">關於我們</a>
+                <a href="#about" class="hover:text-primary transition">核心特色</a>
+                <a href="#schedule" class="hover:text-primary transition">聚會時間</a>
+                <a href="#activity-news" class="hover:text-primary transition">活動訊息</a>
+                <a href="#happiness-station" class="hover:text-primary transition">幸福加油站</a>
+                <a href="#faq" class="hover:text-primary transition">新朋友常見問答</a>
+                <a href="#location" class="hover:text-primary transition">交通資訊</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="pt-24 pb-20 px-6 md:pt-36">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-12 gap-12 items-center">
+            <div class="md:col-span-5 space-y-8 text-center md:text-left">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-primary/20 text-primary text-xs font-bold tracking-wider uppercase shadow-sm">
+                    Since 2011 • Taoyuan City
+                </div>
+                <h1 class="text-4xl md:text-6xl font-serif font-bold text-text-dark leading-tight">
+                    在穩定的真理中<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">建造屬靈的家</span>
+                </h1>
+                <p class="text-text-gray leading-relaxed text-lg">
+                    台宣貝斯特教會是一個重視宣教、教育、連結與社區關懷的家。<br>
+                    <strong>曾黎馨 主任牧師</strong> 誠摯邀請您，在這裡找到生命的定錨點。
+                </p>
+                <div class="flex flex-col md:flex-row gap-4 pt-4 justify-center md:justify-start">
+                    <a href="#schedule" class="px-8 py-3 rounded-xl bg-primary text-white font-medium hover:bg-amber-700 transition shadow-lg shadow-primary/25">
+                        查看聚會時間
+                    </a>
+                    <a href="#location" class="px-8 py-3 rounded-xl bg-white border border-gray-200 text-text-dark font-medium hover:border-primary/50 transition shadow-sm">
+                        如何找到我們
+                    </a>
+                </div>
+            </div>
+            <div class="md:col-span-7 relative flex justify-center md:justify-end items-center">
+                <div class="w-72 h-72 md:w-[450px] md:h-[450px] rounded-full overflow-hidden shadow-glass border-[6px] border-white bg-black relative z-10">
+                    <img src="./images/logo-circle.png" alt="台宣貝斯特教會 Logo" class="w-full h-full object-cover hover:scale-105 transition duration-700">
+                </div>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-primary/20 blur-3xl rounded-full -z-10"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-24 px-6 relative" style="background-color: #FFFFFF;">
+        <div class="max-w-6xl mx-auto">
+            <div class="section-header">
+                <h2 class="section-title">核心特色</h2>
+                <p class="section-subtitle">我們重視的四個信念</p>
+            </div>
+
+            <div class="grid md:grid-cols-4 gap-6">
+                <div class="p-8 rounded-3xl hover:-translate-y-2 transition duration-300 border-4 border-rose-300 bg-rose-50 shadow-sm hover:shadow-lg">
+                    <div class="w-12 h-12 rounded-xl bg-white text-rose-500 flex items-center justify-center text-xl mb-6 shadow-sm border border-rose-100">
+                        <i class="fa-solid fa-hand-holding-heart"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-rose-900 mb-3">社區關懷</h3>
+                    <p class="text-sm text-rose-800/80 leading-relaxed">深入鄰里，成為社區最溫暖的鄰居與支持者。</p>
+                </div>
+                <div class="p-8 rounded-3xl hover:-translate-y-2 transition duration-300 border-4 border-emerald-300 bg-emerald-50 shadow-sm hover:shadow-lg">
+                    <div class="w-12 h-12 rounded-xl bg-white text-emerald-600 flex items-center justify-center text-xl mb-6 shadow-sm border border-emerald-100">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-emerald-900 mb-3">教育裝備</h3>
+                    <p class="text-sm text-emerald-800/80 leading-relaxed">週一至週三的系統化課程，建立紮實信仰根基。</p>
+                </div>
+                <div class="p-8 rounded-3xl hover:-translate-y-2 transition duration-300 border-4 border-sky-300 bg-sky-50 shadow-sm hover:shadow-lg">
+                    <div class="w-12 h-12 rounded-xl bg-white text-sky-600 flex items-center justify-center text-xl mb-6 shadow-sm border border-sky-100">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-sky-900 mb-3">連結關係</h3>
+                    <p class="text-sm text-sky-800/80 leading-relaxed">在小組中建立真實關係，彼此扶持，像家人一樣。</p>
+                </div>
+                <div class="p-8 rounded-3xl hover:-translate-y-2 transition duration-300 border-4 border-amber-300 bg-amber-50 shadow-sm hover:shadow-lg">
+                    <div class="w-12 h-12 rounded-xl bg-white text-amber-600 flex items-center justify-center text-xl mb-6 shadow-sm border border-amber-100">
+                        <i class="fa-solid fa-earth-asia"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-amber-900 mb-3">宣教使命</h3>
+                    <p class="text-sm text-amber-800/80 leading-relaxed">立足台灣，心懸亞洲，放眼天下。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="schedule" class="py-24 px-6 relative" style="background-color: #F2EFE9;">
+        <div class="max-w-4xl mx-auto">
+            <div class="section-header">
+                <h2 class="section-title">聚會時間</h2>
+                <p class="section-subtitle">每週的固定約定，歡迎加入</p>
+            </div>
+
+            <div class="bg-white rounded-[32px] overflow-hidden p-2 md:p-8 shadow-glass border border-white">
+                <div class="flex flex-col md:flex-row items-center justify-between p-6 border-b border-gray-100 hover:bg-amber-50/50 transition rounded-xl group">
+                    <div class="flex items-center gap-4 w-full md:w-auto">
+                        <span class="text-2xl text-primary group-hover:scale-110 transition"><i class="fa-solid fa-church"></i></span>
+                        <div class="text-left">
+                            <h4 class="text-lg font-bold text-text-dark">成人聚會</h4>
+                            <p class="text-xs text-text-gray">信息分享</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 md:mt-0 w-40 py-1.5 bg-amber-400 text-white rounded-lg font-mono font-bold text-sm shadow-md shadow-amber-400/30 text-center">
+                        週六 19:00
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-center justify-between p-6 border-b border-gray-100 hover:bg-amber-50/50 transition rounded-xl group">
+                    <div class="flex items-center gap-4 w-full md:w-auto">
+                        <span class="text-2xl text-primary group-hover:scale-110 transition"><i class="fa-solid fa-child-reaching"></i></span>
+                        <div class="text-left">
+                            <h4 class="text-lg font-bold text-text-dark">兒童主日學</h4>
+                            <p class="text-xs text-text-gray">兒童快樂營</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 md:mt-0 w-40 py-1.5 bg-amber-400 text-white rounded-lg font-mono font-bold text-sm shadow-md shadow-amber-400/30 text-center">
+                        週日 10:00
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-center justify-between p-6 border-b border-gray-100 hover:bg-amber-50/50 transition rounded-xl group">
+                    <div class="flex items-center gap-4 w-full md:w-auto">
+                        <span class="text-2xl text-primary group-hover:scale-110 transition"><i class="fa-solid fa-hands-praying"></i></span>
+                        <div class="text-left">
+                            <h4 class="text-lg font-bold text-text-dark">查經禱告會</h4>
+                            <p class="text-xs text-text-gray">真理探索與福音行動</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 md:mt-0 w-40 py-1.5 bg-amber-400 text-white rounded-lg font-mono font-bold text-sm shadow-md shadow-amber-400/30 text-center">
+                        週五 19:00
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-center justify-between p-6 hover:bg-amber-50/50 transition rounded-xl group">
+                    <div class="flex items-center gap-4 w-full md:w-auto">
+                        <span class="text-2xl text-primary group-hover:scale-110 transition"><i class="fa-solid fa-book-open"></i></span>
+                        <div class="text-left">
+                            <h4 class="text-lg font-bold text-text-dark">裝備訓練</h4>
+                            <p class="text-xs text-text-gray">系統化生命建造</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 md:mt-0 w-40 py-1.5 bg-amber-400 text-white rounded-lg font-mono font-bold text-sm shadow-md shadow-amber-400/30 text-center">
+                        週一至三 19:00
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="activity-news" class="custom-section section-activity">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">活動訊息</h2>
+                <p class="section-subtitle">與我們一同經歷美好的時刻</p>
+            </div>
+            
+            <div class="poster-scroll-wrapper">
+                <div class="scroll-hint">← 左右滑動查看更多 →</div>
+                
+                <div class="poster-scroll-container">
+
+                    <div class="poster-card">
+                        <div class="poster-image-area">
+                            <img src="./images/poster1.jpg" alt="恩典補給站禱告會" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="poster-content">
+                            <h4>恩典補給站禱告會</h4>
+                            <p>期待您的參與</p>
+                        </div>
+                    </div>
+
+                    <div class="poster-card">
+                        <div class="poster-image-area">
+                            <img src="./images/poster2.jpg" alt="一起遇見生命中貴人" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="poster-content">
+                            <h4>一起遇見生命中貴人</h4>
+                            <p>開啟生命轉折點</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="happiness-station" class="custom-section section-happiness">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">幸福加油站</h2>
+                <p class="section-subtitle">為心靈充電，遇見更好的自己</p>
+            </div>
+            
+            <div class="articles-grid">
+                <article class="article-card">
+                    <div class="article-body" style="display: flex; flex-direction: column; height: 100%;">
+                        <span class="article-tag">成長</span>
+                        <h3>遇見更好的自己</h3>
+                        
+                        <p style="color: #666; text-align: justify; margin-bottom: 20px;">
+                            生命中的每一個挑戰，都是為了雕塑出更完美的你。不要害怕暫時的低谷，因為那是為了讓你跳得更高做準備。
+                        </p>
+
+                        <div style="width: 100%; height: 1px; background: #eee; margin-bottom: 20px;"></div>
+
+                        <p style="text-align: center; font-family: 'Noto Serif TC', serif; color: #444; font-size: 1.05rem; line-height: 1.6; font-style: italic;">
+                            「若有人在基督裡，他就是新造的人，舊事已過，都變成新的了。」
+                        </p>
+                        
+                        <p style="margin-top: auto; text-align: right; color: #D97706; font-weight: bold; font-size: 0.9rem;">
+                            —— 哥林多後書 5:17
+                        </p>
+                    </div>
+                </article>
+
+                <article class="article-card">
+                    <div class="article-body" style="display: flex; flex-direction: column; height: 100%;">
+                        <span class="article-tag">關愛</span>
+                        <h3>愛是永不止息</h3>
+                        
+                        <p style="color: #666; text-align: justify; margin-bottom: 20px;">
+                            在忙碌的生活中，我們常常忘記了停下來關心身邊的人。一個微笑、一句溫暖的問候，都能成為他人生命中的一道光。
+                        </p>
+
+                        <div style="width: 100%; height: 1px; background: #eee; margin-bottom: 20px;"></div>
+
+                        <p style="text-align: center; font-family: 'Noto Serif TC', serif; color: #444; font-size: 1.05rem; line-height: 1.6; font-style: italic;">
+                            「凡事包容，凡事相信，凡事盼望，凡事忍耐。愛是永不止息。」
+                        </p>
+                        
+                        <p style="margin-top: auto; text-align: right; color: #D97706; font-weight: bold; font-size: 0.9rem;">
+                            —— 哥林多前書 13:7-8
+                        </p>
+                    </div>
+                </article>
+
+                <article class="article-card">
+                    <div class="article-body" style="display: flex; flex-direction: column; height: 100%;">
+                        <span class="article-tag">希望</span>
+                        <h3>雨後總有彩虹</h3>
+                        
+                        <p style="color: #666; text-align: justify; margin-bottom: 20px;">
+                            無論現在的環境看起來多麼艱難，請相信這都只是過程。如同烏雲散去後陽光必會露臉，你的堅持終將結出甜美的果實。
+                        </p>
+
+                        <div style="width: 100%; height: 1px; background: #eee; margin-bottom: 20px;"></div>
+
+                        <p style="text-align: center; font-family: 'Noto Serif TC', serif; color: #444; font-size: 1.05rem; line-height: 1.6; font-style: italic;">
+                            「一宿雖然有哭泣，早晨便必歡呼。」
+                        </p>
+                        
+                        <p style="margin-top: auto; text-align: right; color: #D97706; font-weight: bold; font-size: 0.9rem;">
+                            —— 詩篇 30:5
+                        </p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-12 px-6" id="faq">
+        <div class="max-w-3xl mx-auto">
+            <div class="section-header">
+                <h2 class="section-title">新朋友常見問答</h2>
+                <p class="section-subtitle">解開您心中的疑惑</p>
+            </div>
+            
+            <div class="space-y-4">
+                <details class="group bg-white rounded-2xl p-5 cursor-pointer border border-gray-100 shadow-sm">
+                    <summary class="flex justify-between items-center font-medium text-text-dark list-none">
+                        <span>我不是基督徒可以參加嗎？</span>
+                        <span class="transition group-open:rotate-180 text-primary"><i class="fa-solid fa-chevron-down"></i></span>
+                    </summary>
+                    <p class="text-text-gray text-sm mt-4 leading-relaxed pl-4 border-l-2 border-primary/20">
+                        非常歡迎！我們是一個開放的家庭，您可以抱著認識新朋友、聽聽故事的心情前來，沒有任何壓力。
+                    </p>
+                </details>
+            <details class="group bg-white rounded-2xl p-5 cursor-pointer border border-gray-100 shadow-sm">
+                    <summary class="flex justify-between items-center font-medium text-text-dark list-none">
+                        <span>我沒有聖經，去教會要準備什麼嗎？</span>
+                        <span class="transition group-open:rotate-180 text-primary"><i class="fa-solid fa-chevron-down"></i></span>
+                    </summary>
+                    <p class="text-text-gray text-sm mt-4 leading-relaxed pl-4 border-l-2 border-primary/20">
+                        您不需要準備任何東西，只要帶著一顆敞開的心。教會現場備有大螢幕投影經文與歌詞，您也可以空手前來，享受這段放鬆的時光。
+                    </p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <section id="location" class="py-24 px-6 bg-white border-t border-gray-200">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">交通資訊</h2>
+                <p class="section-subtitle">歡迎蒞臨台宣貝斯特教會</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-stretch">
+                <div class="space-y-8 py-4">
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center text-primary shadow-sm shrink-0">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-text-dark">地址</h4>
+                                <p class="text-text-gray">桃園市桃園區復興路 51-2 號 <span class="text-primary font-bold">7 樓之 3</span></p>
+                                <p class="text-xs text-primary mt-1 bg-primary/5 inline-block px-2 py-1 rounded">💡 貼心提醒：大樓入口有電梯，請直達 7 樓</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-center text-primary shadow-sm shrink-0">
+                                <i class="fa-solid fa-phone"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-text-dark">聯絡電話</h4>
+                                <p class="text-text-gray">03-3479969 (曾黎馨 牧師)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="https://goo.gl/maps/YOUR_REAL_MAP_ID" target="_blank" class="block w-full py-4 rounded-xl bg-text-dark text-white text-center font-bold hover:bg-primary transition shadow-lg shadow-text-dark/20">
+                        開啟 Google 地圖導航
+                    </a>
+                </div>
+                <div class="h-[400px] md:h-auto rounded-[32px] overflow-hidden shadow-lg border-[6px] border-gray-100 p-0">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3616.27257976722!2d121.31355647537507!3d24.99085217784432!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34681f035a2b35d7%3A0xf559f0e40c1751df!2z5Z-6552j5pWZ5Y-w5a6j6LKd5pav54m55pWZ5pyD!5e0!3m2!1szh-TW!2stw!4v1767458863249!5m2!1szh-TW!2stw" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-12 text-center bg-[#FAF8F2]">
+        <p class="text-xs font-bold tracking-[0.2em] text-text-gray/60">© 2026 BEST CHURCH TAOYUAN</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu-overlay');
+            // 切換 hidden 類別 (原本隱藏就顯示，原本顯示就隱藏)
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                // 禁止背景捲動，讓體驗更好
+                document.body.style.overflow = 'hidden';
+            } else {
+                menu.classList.add('hidden');
+                // 恢復背景捲動
+                document.body.style.overflow = '';
+            }
+        }
+    </script>
+
+</body>
+</html>
