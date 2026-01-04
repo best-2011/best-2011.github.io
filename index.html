@@ -158,8 +158,9 @@
             font-size: 1.1rem;
         }
 
+        /* --- 這裡控制海報下方的白色文字區 (已縮小版) --- */
         .poster-content {
-            padding: 15px;
+            padding: 10px;        /* 縮小內距 (原本15px) */
             text-align: center;
             background: #fff;
             border-top: 1px solid #f0f0f0;
@@ -168,12 +169,13 @@
         .poster-content h4 {
             margin: 0 0 5px 0;
             color: #333;
-            font-size: 1.1rem;
+            font-size: 1rem;      /* 字體縮小 (原本1.1rem) */
         }
+
         .poster-content p {
             margin: 0;
             color: #888;
-            font-size: 0.9rem;
+            font-size: 0.85rem;   /* 字體縮小 (原本0.9rem) */
         }
 
 
@@ -442,21 +444,27 @@
 
                     <div class="poster-card">
                         <div class="poster-image-area">
-                            <img src="./images/poster1.jpg" alt="恩典補給站禱告會" style="width: 100%; height: 100%; object-fit: cover;">
+                            <img src="./images/poster1.jpg" 
+                                onclick="showPoster(this.src)" 
+                                class="w-full h-full object-cover cursor-pointer hover:opacity-90 transition" 
+                                alt="年度特別聚會">
                         </div>
                         <div class="poster-content">
-                            <h4>恩典補給站禱告會</h4>
-                            <p>期待您的參與</p>
+                            <h4>年度特別聚會</h4>
+                            <p>點擊圖片放大</p>
                         </div>
                     </div>
 
                     <div class="poster-card">
                         <div class="poster-image-area">
-                            <img src="./images/poster2.jpg" alt="一起遇見生命中貴人" style="width: 100%; height: 100%; object-fit: cover;">
+                            <img src="./images/poster2.jpg" 
+                                onclick="showPoster(this.src)" 
+                                class="w-full h-full object-cover cursor-pointer hover:opacity-90 transition" 
+                                alt="週末青年之夜">
                         </div>
                         <div class="poster-content">
-                            <h4>一起遇見生命中貴人</h4>
-                            <p>開啟生命轉折點</p>
+                            <h4>週末青年之夜</h4>
+                            <p>點擊圖片放大</p>
                         </div>
                     </div>
 
@@ -629,7 +637,40 @@
             }
         }
     </script>
+<div id="poster-modal" class="hidden fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 backdrop-blur-sm transition-opacity duration-300" onclick="closePoster()">
+    <button class="absolute top-5 right-5 text-white text-4xl hover:text-gray-300 transition">
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+    <img id="modal-img" src="" class="max-w-full max-h-full rounded-lg shadow-2xl object-contain scale-95 transition-transform duration-300">
+</div>
 
+<script>
+    // 開啟放大視窗
+    function showPoster(imgSrc) {
+        const modal = document.getElementById('poster-modal');
+        const img = document.getElementById('modal-img');
+        
+        img.src = imgSrc; // 把點擊的圖片網址傳進來
+        modal.classList.remove('hidden'); // 顯示視窗
+        document.body.style.overflow = 'hidden'; // 鎖住背景不讓滑動
+        
+        // 簡單的動畫效果
+        setTimeout(() => {
+            img.classList.remove('scale-95');
+            img.classList.add('scale-100');
+        }, 10);
+    }
+
+    // 關閉放大視窗
+    function closePoster() {
+        const modal = document.getElementById('poster-modal');
+        const img = document.getElementById('modal-img');
+        
+        modal.classList.add('hidden'); // 隱藏視窗
+        document.body.style.overflow = ''; // 恢復背景滑動
+        img.classList.remove('scale-100');
+        img.classList.add('scale-95');
+    }
+</script>
 </body>
-
 </html>
